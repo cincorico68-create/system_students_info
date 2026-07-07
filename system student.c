@@ -1,29 +1,26 @@
 #include <stdio.h> 
 #include <string.h>
 
+#define MAX 100
 
-#define MAX_CAPACITY 10000 
-
-
-void addStudent(int ids[], char names[][50], char majors[][50], float gpas[], int credits[], int *count);
-void displayAllStudents(int ids[], char names[][50], char majors[][50], int count);
-void searchByID(int ids[], char names[][50], char majors[][50], float gpas[], int credits[], int count);
-void searchByGPA(int ids[], char names[][50], float gpas[], int count);
-void searchByMajor(int ids[], char names[][50], char majors[][50], int count);
+typedef struct {
+    int id;
+    char name[20];
+    char major[20];
+    float gpa;
+    int credits;
+} Student;
+void addStudent(Student students[], int *count);
+void displayAllStudents(const Student students[], int count);
+void searchByID(const Student students[], int count);
+void searchByGPA(const Student students[], int count);
+void searchByMajor(const Student students[], int count);
 
 int main() {
-    
-    int ids[MAX_CAPACITY];
-    char names[MAX_CAPACITY][50];
-    char majors[MAX_CAPACITY][50];
-    float gpas[MAX_CAPACITY];
-    int credits[MAX_CAPACITY];
-
+    Student students[MAX];
     int studentCount = 0; 
     int choice;
-
     printf("=== Welcome, Dr. Santos, to the Large-Capacity Student Registry ===\n");
-
     do {
         printf("\n--- Main Menu ---\n");
         printf("1. Add New Student (Step-by-Step)\n");
@@ -41,23 +38,21 @@ int main() {
             continue;
         }
         while (getchar() != '\n'); 
-
-        switch (choice) {
+       switch (choice) {
             case 1:
-        
-                addStudent(ids, names, majors, gpas, credits, &studentCount);
+                addStudent(students, &studentCount);
                 break;
             case 2:
-                displayAllStudents(ids, names, majors, studentCount);
+                displayAllStudents(students, studentCount);
                 break;
             case 3:
-                searchByID(ids, names, majors, gpas, credits, studentCount);
+                searchByID(students, studentCount);
                 break;
             case 4:
-                searchByGPA(ids, names, gpas, studentCount);
+                searchByGPA(students, studentCount);
                 break;
             case 5:
-                searchByMajor(ids, names, majors, studentCount);
+                searchByMajor(students, studentCount);
                 break;
             case 6:
                 printf("\nExiting system. Goodbye!\n");
@@ -69,42 +64,40 @@ int main() {
 
     return 0;
 }
-
-
-void addStudent(int ids[], char names[][50], char majors[][50], float gpas[], int credits[], int *count) {
-    if (*count >= MAX_CAPACITY) {
+void addStudent(Student students[], int *count) {
+    if (*count >= MAX) {
         printf("\n[Error] System maximum capacity reached.\n");
         return;
     }
-
     int current = *count; 
     printf("\n--- Registering Student #%d ---\n", current + 1);
     
     printf("Step 1: Enter ID: ");
-    scanf("%d", &ids[current]);
-    while (getchar() != '\n');
-
+    if (scanf("%d", &students[current].id) != 1) {
+        printf("[Error] Invalid ID input.\n");
+        while (getchar() != '\n');
+        return;
+    } 
+    while (getchar() != '\n'); 
     printf("Step 2: Enter Name: ");
-    fgets(names[current], 50, stdin);
-    names[current][strcspn(names[current], "\n")] = '\0';
+    fgets(students[current].name, 50, stdin);
+    students[current].name[strcspn(students[current].name, "\n")] = '\0'; // Remove trailing newline
 
     printf("Step 3: Enter Major: ");
-    fgets(majors[current], 50, stdin);
-    majors[current][strcspn(majors[current], "\n")] = '\0';
+    fgets(students[current].major, 50, stdin);
+    students[current].major[strcspn(students[current].major, "\n")] = '\0'; // Remove trailing newline
 
     printf("Step 4: Enter GPA: ");
-    scanf("%f", &gpas[current]);
+    scanf("%f", &students[current].gpa);
 
     printf("Step 5: Enter Credits Completed: ");
-    scanf("%d", &credits[current]);
+    scanf("%d", &students[current].credits);
     while (getchar() != '\n');
 
     (*count)++; 
     printf("\n[Success] Student record saved successfully!\n");
 }
-
-
-void displayAllStudents(int ids[], char names[][50], char majors[][50], int count) {
+void displayAllStudents(const Student students[], int count) {
     if (count == 0) {
         printf("\n[Notice] Registry is empty.\n");
         return;
@@ -112,12 +105,12 @@ void displayAllStudents(int ids[], char names[][50], char majors[][50], int coun
     printf("\n%-8s %-20s %-20s\n", "ID", "Name", "Major");
     printf("--------------------------------------------------\n");
     for (int i = 0; i < count; i++) {
-        printf("%-8d %-20s %-20s\n", ids[i], names[i], majors[i]);
+        printf("%-8d %-20s %-20s\n", students[i].id, students[i].name, students[i].major);
     }
 }
 
 
-void searchByID(int ids[], char names[][50], char majors[][50], float gpas[], int credits[], int count) {
+void searchByID(const Student students[], int count) {
     if (count == 0) {
         printf("\n[Notice] Registry is empty.\n");
         return;
@@ -128,17 +121,15 @@ void searchByID(int ids[], char names[][50], char majors[][50], float gpas[], in
     while (getchar() != '\n');
 
     for (int i = 0; i < count; i++) {
-        if (ids[i] == searchID) {
+        if (students[i].id == searchID) {
             printf("\nMatch Found -> Name: %s | Major: %s | GPA: %.2f | Credits: %d\n", 
-                   names[i], majors[i], gpas[i], credits[i]);
+                   students[i].name, students[i].major, students[i].gpa, students[i].credits);
             return;
         }
     }
     printf("\nID %d not found.\n", searchID);
 }
-
-
-void searchByGPA(int ids[], char names[][50], float gpas[], int count) {
+void searchByGPA(const Student students[], int count) {
     if (count == 0) {
         printf("\n[Notice] Registry is empty.\n");
         return;
@@ -151,16 +142,14 @@ void searchByGPA(int ids[], char names[][50], float gpas[], int count) {
 
     printf("\nStudents with GPA >= %.2f:\n", threshold);
     for (int i = 0; i < count; i++) {
-        if (gpas[i] >= threshold) {
-            printf("- %s (ID: %d | GPA: %.2f)\n", names[i], ids[i], gpas[i]);
+        if (students[i].gpa >= threshold) {
+            printf("- %s (ID: %d | GPA: %.2f)\n", students[i].name, students[i].id, students[i].gpa);
             gpaMatches++;
         }
     }
     if (gpaMatches == 0) printf("No students match this threshold.\n");
 }
-
-
-void searchByMajor(int ids[], char names[][50], char majors[][50], int count) {
+void searchByMajor(const Student students[], int count) {
     if (count == 0) {
         printf("\n[Notice] Registry is empty.\n");
         return;
@@ -173,8 +162,8 @@ void searchByMajor(int ids[], char names[][50], char majors[][50], int count) {
 
     printf("\nStudents in %s:\n", searchMajor);
     for (int i = 0; i < count; i++) {
-        if (strcmp(majors[i], searchMajor) == 0) {
-            printf("- %s (ID: %d)\n", names[i], ids[i]);
+        if (strcmp(students[i].major, searchMajor) == 0) {
+            printf("- %s (ID: %d)\n", students[i].name, students[i].id);
             majorCount++;
         }
     }
