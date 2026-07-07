@@ -81,12 +81,11 @@ void addStudent(Student students[], int *count) {
     while (getchar() != '\n'); 
     printf("Step 2: Enter Name: ");
     fgets(students[current].name, 50, stdin);
-    students[current].name[strcspn(students[current].name, "\n")] = '\0'; // Remove trailing newline
+    students[current].name[strcspn(students[current].name, "\n")] = '\0'; 
 
     printf("Step 3: Enter Major: ");
     fgets(students[current].major, 50, stdin);
-    students[current].major[strcspn(students[current].major, "\n")] = '\0'; // Remove trailing newline
-
+    students[current].major[strcspn(students[current].major, "\n")] = '\0';
     printf("Step 4: Enter GPA: ");
     scanf("%f", &students[current].gpa);
 
