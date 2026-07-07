@@ -8,7 +8,7 @@ typedef struct {
     char name[20];
     char major[20];
     float gpa;
-    int credits;
+    
 } Student;
 void addStudent(Student students[], int *count);
 void displayAllStudents(const Student students[], int count);
@@ -90,8 +90,6 @@ void addStudent(Student students[], int *count) {
     printf("Step 4: Enter GPA: ");
     scanf("%f", &students[current].gpa);
 
-    printf("Step 5: Enter Credits Completed: ");
-    scanf("%d", &students[current].credits);
     while (getchar() != '\n');
 
     (*count)++; 
@@ -122,8 +120,8 @@ void searchByID(const Student students[], int count) {
 
     for (int i = 0; i < count; i++) {
         if (students[i].id == searchID) {
-            printf("\nMatch Found -> Name: %s | Major: %s | GPA: %.2f | Credits: %d\n", 
-                   students[i].name, students[i].major, students[i].gpa, students[i].credits);
+            printf("\nMatch Found -> Name: %s | Major: %s | GPA: %.2f\n", 
+                   students[i].name, students[i].major, students[i].gpa);
             return;
         }
     }
