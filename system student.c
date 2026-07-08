@@ -75,7 +75,6 @@ void addStudent(Student students[], int *count) {
     students[current].name[strcspn(students[current].name, "\n")] = '\0'; 
 
     printf("Step 3: Enter Major: ");
-    // FIXED: Using sizeof guarantees no buffer overflow
     fgets(students[current].major, sizeof(students[current].major), stdin);
     students[current].major[strcspn(students[current].major, "\n")] = '\0';
     
