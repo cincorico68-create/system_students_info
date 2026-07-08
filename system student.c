@@ -95,7 +95,7 @@ void displayAllStudents(const Student students[], int count) {
         printf("\n[Notice] Registry is empty.\n");
         return;
     }
-    printf("\n%-8s %-40s %-40s\n", "ID", "Name", "Major");
+    printf("\n%-8s  %-40s %-40s  \n", "ID", "Name", "Major");
     printf("-----------------------------------------------------------------------------------------\n");
     for (int i = 0; i < count; i++) {
         printf("%-8d %-40s %-40s\n", students[i].id, students[i].name, students[i].major);
