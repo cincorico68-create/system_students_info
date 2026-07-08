@@ -126,23 +126,3 @@ void searchByID(const Student students[], int count) {
     }
     printf("\nID %d not found.\n", searchID);
 }
-void searchByGPA(const Student students[], int count) {
-    if (count == 0) {
-        printf("\n[Notice] Registry is empty.\n");
-        return;
-    }
-    float threshold;
-    int gpaMatches = 0;
-    printf("\nEnter minimum GPA threshold: ");
-    scanf("%f", &threshold);
-    while (getchar() != '\n');
-
-    printf("\nStudents with GPA >= %.2f:\n", threshold);
-    for (int i = 0; i < count; i++) {
-        if (students[i].gpa >= threshold) {
-            printf("- %s (ID: %d | GPA: %.2f)\n", students[i].name, students[i].id, students[i].gpa);
-            gpaMatches++;
-        }
-    }
-    if (gpaMatches == 0) printf("No students match this threshold.\n");
-}
