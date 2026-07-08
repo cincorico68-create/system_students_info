@@ -146,23 +146,3 @@ void searchByGPA(const Student students[], int count) {
     }
     if (gpaMatches == 0) printf("No students match this threshold.\n");
 }
-void searchByMajor(const Student students[], int count) {
-    if (count == 0) {
-        printf("\n[Notice] Registry is empty.\n");
-        return;
-    }
-    char searchMajor[50];
-    int majorCount = 0;
-    printf("\nEnter Major to query: ");
-    fgets(searchMajor, sizeof(searchMajor), stdin);
-    searchMajor[strcspn(searchMajor, "\n")] = '\0';
-
-    printf("\nStudents in %s:\n", searchMajor);
-    for (int i = 0; i < count; i++) {
-        if (strcmp(students[i].major, searchMajor) == 0) {
-            printf("- %s (ID: %d)\n", students[i].name, students[i].id);
-            majorCount++;
-        }
-    }
-    printf("Total headcount for %s: %d\n", searchMajor, majorCount);
-}
